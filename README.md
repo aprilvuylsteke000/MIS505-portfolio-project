@@ -52,3 +52,5 @@ The notebook uses local Windows file paths. Users must update these paths before
 World Bank. (n.d.). *School enrollment, primary (number)*. https://data.worldbank.org/indicator/SE.PRM.ENRL
 
 World Bank. (n.d.). *GDP per capita (current US$)*. https://data.worldbank.org/indicator/NY.GDP.PCAP.CD
+
+World Bank. (n.d.). *GDP per capita (current US$)* - Belgium. https://data.worldbank.org/indicator/NY.GDP.PCAP.CD?locations=BE
