@@ -8656,7 +8656,6 @@ dtype: int64
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Duplicate rows:"</span><span class="p">,</span> <span class="n">data_education_gdp_final</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"Duplicate years:"</span><span class="p">,</span> <span class="n">data_education_gdp_final</span><span class="p">[</span><span class="s2">"Year"</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 
-
 <span class="c1"># Check for outliers using the IQR method. We learned in R, but adding in Python here</span>
 <span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"Primary Enrollment"</span><span class="p">,</span> <span class="s2">"GDP"</span><span class="p">]:</span>
     <span class="n">column_values</span> <span class="o">=</span> <span class="n">data_education_gdp_final</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
@@ -8676,6 +8675,9 @@ dtype: int64
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Outlier check for:"</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Lower bound:"</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Upper bound:"</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Number of outliers:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">outlier_records</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">outlier_records</span><span class="p">[[</span><span class="s2">"Year"</span><span class="p">,</span> <span class="n">column_name</span><span class="p">]])</span>
 
 <span class="c1"># Validate year coverage</span>
 <span class="n">expected_years</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">2021</span><span class="p">))</span>
@@ -8731,9 +8733,19 @@ Duplicate years: 0
 
 Outlier check for: Primary Enrollment
 Lower bound: 669262.0
+Upper bound: 843382.0
+Number of outliers: 0
+Empty DataFrame
+Columns: [Year, Primary Enrollment]
+Index: []
 
 Outlier check for: GDP
 Lower bound: 25619.906382100784
+Upper bound: 59250.17051523602
+Number of outliers: 2
+   Year           GDP
+0  2001  23015.071263
+1  2002  25006.191397
 Missing years: []
 Unexpected years: []
 Total records: 20
@@ -8826,7 +8838,7 @@ Total records: 20
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>&lt;sqlite3.Cursor at 0x1f2b7b368c0&gt;</pre>
+<pre>&lt;sqlite3.Cursor at 0x21fc05d3f40&gt;</pre>
 </div>
 </div>
 </div>
