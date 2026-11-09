@@ -8651,6 +8651,39 @@ dtype: int64
 <span class="nb">print</span><span class="p">(</span><span class="n">data_education_gdp_final</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_education_gdp_final</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_education_gdp_final</span><span class="p">)</span>
+
+<span class="c1"># Check for duplicates</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Duplicate rows:"</span><span class="p">,</span> <span class="n">data_education_gdp_final</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Duplicate years:"</span><span class="p">,</span> <span class="n">data_education_gdp_final</span><span class="p">[</span><span class="s2">"Year"</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+
+<span class="c1"># Check for outliers using the IQR method. We learned in R, but adding in Python here</span>
+<span class="k">for</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"Primary Enrollment"</span><span class="p">,</span> <span class="s2">"GDP"</span><span class="p">]:</span>
+    <span class="n">column_values</span> <span class="o">=</span> <span class="n">data_education_gdp_final</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">valid_values</span> <span class="o">=</span> <span class="n">column_values</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">column_values</span><span class="p">)]</span>
+
+    <span class="n">first_quartile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">valid_values</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+    <span class="n">third_quartile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">valid_values</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
+    <span class="n">interquartile_range</span> <span class="o">=</span> <span class="n">third_quartile</span> <span class="o">-</span> <span class="n">first_quartile</span>
+
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">first_quartile</span> <span class="o">-</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">interquartile_range</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">third_quartile</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">interquartile_range</span>
+
+    <span class="n">outlier_records</span> <span class="o">=</span> <span class="n">data_education_gdp_final</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">data_education_gdp_final</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lower_bound</span><span class="p">)</span> <span class="o">|</span>
+        <span class="p">(</span><span class="n">data_education_gdp_final</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">upper_bound</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Outlier check for:"</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Lower bound:"</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span>
+
+<span class="c1"># Validate year coverage</span>
+<span class="n">expected_years</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">2021</span><span class="p">))</span>
+<span class="n">actual_years</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">data_education_gdp_final</span><span class="p">[</span><span class="s2">"Year"</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Missing years:"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">expected_years</span> <span class="o">-</span> <span class="n">actual_years</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Unexpected years:"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">actual_years</span> <span class="o">-</span> <span class="n">expected_years</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Total records:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_education_gdp_final</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -8693,6 +8726,17 @@ dtype: object
 17  2018            821236.0  47549.208049
 18  2019            823109.0  46599.111335
 19  2020                 NaN  45189.366900
+Duplicate rows: 0
+Duplicate years: 0
+
+Outlier check for: Primary Enrollment
+Lower bound: 669262.0
+
+Outlier check for: GDP
+Lower bound: 25619.906382100784
+Missing years: []
+Unexpected years: []
+Total records: 20
 </pre>
 </div>
 </div>
@@ -8782,7 +8826,7 @@ dtype: object
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>&lt;sqlite3.Cursor at 0x227ea65d5c0&gt;</pre>
+<pre>&lt;sqlite3.Cursor at 0x1f2b7b368c0&gt;</pre>
 </div>
 </div>
 </div>
@@ -8933,7 +8977,14 @@ dtype: object
 <span class="n">rows</span> <span class="o">=</span> <span class="n">cursor_education_gdp</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT COUNT(*) </span><span class="se">\</span>
 <span class="s2">    FROM education_gdp;"</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"Total records:"</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Check for missing primary enrollment values</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">cursor_education_gdp</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT Year, Primary_Enrollment </span><span class="se">\</span>
+<span class="s2">    FROM education_gdp </span><span class="se">\</span>
+<span class="s2">    WHERE Primary_Enrollment IS NULL;"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"Missing enrollment:"</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8946,7 +8997,8 @@ dtype: object
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>(20,)
+<pre>Total records: 20
+Missing enrollment: (2020, None)
 </pre>
 </div>
 </div>
