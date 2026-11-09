@@ -7849,6 +7849,14 @@ a.anchor-link {
 <span class="c1"># Check first 5 rows, dimensions</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_education_raw</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_education_raw</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Get descriptive statistics for Belgium, 2001-2020</span>
+<span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">2021</span><span class="p">)]</span>
+
+<span class="n">education_belgium</span> <span class="o">=</span> <span class="n">data_education_raw</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data_education_raw</span><span class="p">[</span><span class="s2">"Country Code"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"BEL"</span><span class="p">,</span> <span class="n">years</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Belgium Primary Enrollment Statistics"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">education_belgium</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -7891,6 +7899,17 @@ a.anchor-link {
 
 [5 rows x 67 columns]
 (266, 67)
+
+Belgium Primary Enrollment Statistics
+count        19.000000
+mean     763481.315789
+std       31722.548311
+min      731603.000000
+25%      734557.000000
+50%      761730.000000
+75%      778087.000000
+max      823109.000000
+Name: 17, dtype: float64
 </pre>
 </div>
 </div>
@@ -8228,6 +8247,14 @@ dtype: int64
 
 <span class="nb">print</span><span class="p">(</span><span class="n">data_gdp_raw</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">data_gdp_raw</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Get descriptive statistics for Belgium, 2001-2020</span>
+<span class="n">gdp_year_columns</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">2021</span><span class="p">)]</span>
+
+<span class="n">gdp_belgium</span> <span class="o">=</span> <span class="n">data_gdp_raw</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">data_gdp_raw</span><span class="p">[</span><span class="s2">"Country Code"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"BEL"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_gdp_raw</span><span class="p">[</span><span class="s2">"Indicator Code"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"NY.GDP.PCAP.CD"</span><span class="p">),</span> <span class="n">gdp_year_columns</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Belgium GDP Per Capita Statistics"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gdp_belgium</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
@@ -8270,6 +8297,17 @@ dtype: int64
 
 [5 rows x 67 columns]
 (383572, 67)
+
+Belgium GDP Per Capita Statistics
+count       20.000000
+mean     41217.436398
+std       7484.542941
+min      23015.071263
+25%      38231.255432
+50%      44258.823920
+75%      46638.821465
+max      48303.397956
+Name: 97088, dtype: float64
 </pre>
 </div>
 </div>
@@ -8744,7 +8782,7 @@ dtype: object
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>&lt;sqlite3.Cursor at 0x199695985c0&gt;</pre>
+<pre>&lt;sqlite3.Cursor at 0x227ea65d5c0&gt;</pre>
 </div>
 </div>
 </div>
