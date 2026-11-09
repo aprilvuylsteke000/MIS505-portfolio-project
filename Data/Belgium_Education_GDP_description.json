@@ -1,0 +1,23 @@
+{
+    "dataset": "Belgium_Education_GDP.csv",
+    "country": "Belgium",
+    "description": "Primary enrollment and GDP per capita, 2001-2020",
+    "missing_data": "Primary enrollment for 2020 not available in data",
+    "attributes": [
+        {
+            "column_name": "Year",
+            "data_type": "integer",
+            "meaning": "Calendar year of observation"
+        },
+        {
+            "column_name": "Primary Enrollment",
+            "data_type": "float",
+            "meaning": "Num pupils enrolled in primary education"
+        },
+        {
+            "column_name": "GDP",
+            "data_type": "float",
+            "meaning": "GDP per capita in current USD"
+        }
+    ]
+}
